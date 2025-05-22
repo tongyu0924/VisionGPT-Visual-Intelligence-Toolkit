@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vision Agent Tools</title>
+</head>
+<body>
+    <h2>Upload Image(s) & Select Task</h2>
+    <form id="tool-form" enctype="multipart/form-data">
+        <input type="file" name="file" id="file" required><br><br>
+
+        <label>Task:</label>
+        <select name="mode" id="mode">
+            <option value="describe">Describe</option>
+            <option value="analyze">Analyze</option>
+            <option value="creative">Creative</option>
+            <option value="ask">Ask About Image</option>
+            <option value="reason">Reason From Description</option>
+            <option value="compare">Compare Images</option>
+            <option value="describe_and_draw">Describe and Draw</option>
+            <option value="conversational">Conversational</option>
+        </select><br><br>
+
+        <label>Question / Prompt (if applicable):</label>
+        <input type="text" name="question" id="question"><br><br>
+
+        <button type="submit">Run</button>
+    </form>
+
+    <h3>Result:</h3>
+    <pre id="output"></pre>
+    <div id="image-output"></div>
+
+    <script>
+        const modeSelect = document.getElementById('mode');
+        const fileInput = document.getElementById('file');
+
+        // 自動控制是否允許多檔
+        modeSelect.addEventListener('change', () => {
+            const mode = modeSelect.value;
+            if (mode === 'compare') {
+                fileInput.setAttribute('multiple', '');
+            } else {
+                fileInput.removeAttribute('multiple');
+            }
+        });
+
+        document.getElementById('tool-form').onsubmit = async function(e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+
+            const response = await fetch('/process', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            document.getElementById('output').innerText = data.result || data.description || data.error || '';
+
+            if (data.image_url) {
+                document.getElementById('image-output').innerHTML =
+                    `<img src="${data.image_url}" alt="Generated Image" width="512"/>`;
+            } else {
+                document.getElementById('image-output').innerHTML = '';
+            }
+        };
+    </script>
+</body>
+</html>
