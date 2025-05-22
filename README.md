@@ -7,18 +7,29 @@ It allows users to describe, analyze, reason about, and compare images through a
 
 ---
 
-## ✨ Features
+## Features
 
-- 🖼️ **Image Description** (default / analytical / creative)
-- ❓ **Ask About Image** (VQA-like prompt-based answering)
-- 🧠 **Reason From Description** (step-by-step reasoning)
-- 📊 **Compare Images** (multi-image side-by-side analysis)
-- 🎨 **Describe and Draw** (caption-based image generation via DALL·E)
-- 💬 **Conversational Agent** (chat-like vision assistant)
+- **Image Description** (default / analytical / creative)
+- **Ask About Image** (VQA-like prompt-based answering)
+- **Reason From Description** (step-by-step reasoning)
+- **Compare Images** (multi-image side-by-side analysis)
+- **Describe and Draw** (caption-based image generation via DALL·E)
+- **Conversational Agent** (chat-like vision assistant)
 
 ---
 
-## 🛠️ Built With
+## Project Structure
+```
+VisionGPT/
+├── app.py # Flask backend app
+├── vision_tools.py # Core logic for image processing with GPT
+├── templates/
+│ └── index.html # Frontend interface
+├── static/ # Optional assets (CSS/JS)
+├── demo.png # Screenshot for README
+```
+
+## Built With
 
 - Python + Flask – Backend server
 - OpenAI GPT-4o – Multimodal image & text model
@@ -28,7 +39,7 @@ It allows users to describe, analyze, reason about, and compare images through a
 
 ---
 
-## ⚙️ Setup & Run
+## Setup & Run
 
 1. Install dependencies (via `pip`)
    ```bash
