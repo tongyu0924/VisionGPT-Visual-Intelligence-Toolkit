@@ -32,8 +32,8 @@ It allows users to describe, analyze, reason about, and compare images through a
 
 1. Install dependencies (via `pip`)
    ```bash
-   pip install flask openai pillow python-dotenv
-  ```
+   pip install flask openai pillow python-dotenv```
+   
 2. Set your OpenAI API key
 
 3. Run the Flask app
