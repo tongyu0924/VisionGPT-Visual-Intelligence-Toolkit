@@ -37,8 +37,8 @@ It allows users to describe, analyze, reason about, and compare images through a
 2. Set your OpenAI API key
 
 3. Run the Flask app
-```
-python app.py
-```
+   ```
+   python app.py
+   ```
 
 4. Open your browser and visit: `http://localhost:5000`
