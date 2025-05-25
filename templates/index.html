@@ -2,11 +2,19 @@
 <html>
 <head>
     <title>Vision Agent Tools</title>
+    <style>
+        #canvas {
+            border: 1px solid #000;
+            cursor: crosshair;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h2>Upload Image(s) & Select Task</h2>
+    <h2>Upload Image(s) or Draw Sketch & Select Task</h2>
+
     <form id="tool-form" enctype="multipart/form-data">
-        <input type="file" name="file" id="file" required><br><br>
+        <input type="file" name="file" id="file"><br><br>
 
         <label>Task:</label>
         <select name="mode" id="mode">
@@ -18,10 +26,19 @@
             <option value="compare">Compare Images</option>
             <option value="describe_and_draw">Describe and Draw</option>
             <option value="conversational">Conversational</option>
+            <option value="referring_expression">Referring Expression</option>
+            <option value="entailment">Visual Entailment</option>
+            <option value="sketch_to_image">Sketch to Image</option> 
         </select><br><br>
 
         <label>Question / Prompt (if applicable):</label>
         <input type="text" name="question" id="question"><br><br>
+
+        <div id="sketch-section" style="display: none;">
+            <label>Draw Sketch (if no image uploaded):</label><br>
+            <canvas id="canvas" width="256" height="256"></canvas><br>
+            <button type="button" id="clear">Clear Sketch</button><br><br>
+        </div>
 
         <button type="submit">Run</button>
     </form>
@@ -33,8 +50,44 @@
     <script>
         const modeSelect = document.getElementById('mode');
         const fileInput = document.getElementById('file');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const sketchSection = document.getElementById('sketch-section');
+        let drawing = false;
 
-        // 自動控制是否允許多檔
+        const modesUsingCanvas = [
+            "sketch_to_image", "describe", "analyze", "creative",
+            "ask", "reason", "referring_expression", "entailment"
+        ];
+
+        // 畫圖功能
+        canvas.addEventListener('mousedown', () => drawing = true);
+        canvas.addEventListener('mouseup', () => {
+            drawing = false;
+            ctx.beginPath();
+        });
+        canvas.addEventListener('mouseout', () => drawing = false);
+        canvas.addEventListener('mousemove', e => {
+            if (!drawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = 'black';
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        });
+
+        // 清除畫布
+        document.getElementById('clear').onclick = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+        };
+
+        // 切換模式時，根據選項顯示畫布
         modeSelect.addEventListener('change', () => {
             const mode = modeSelect.value;
             if (mode === 'compare') {
@@ -42,12 +95,24 @@
             } else {
                 fileInput.removeAttribute('multiple');
             }
+            sketchSection.style.display = modesUsingCanvas.includes(mode) ? 'block' : 'none';
         });
 
         document.getElementById('tool-form').onsubmit = async function(e) {
             e.preventDefault();
-            const form = e.target;
-            const formData = new FormData(form);
+            const formData = new FormData();
+            const mode = modeSelect.value;
+            const question = document.getElementById('question').value;
+
+            formData.append('mode', mode);
+            formData.append('question', question);
+
+            if (fileInput.files.length > 0) {
+                formData.append('file', fileInput.files[0]);
+            } else if (modesUsingCanvas.includes(mode)) {
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+                formData.append('file', blob, 'canvas.png');
+            }
 
             const response = await fetch('/process', {
                 method: 'POST',
@@ -55,7 +120,6 @@
             });
 
             const data = await response.json();
-
             document.getElementById('output').innerText = data.result || data.description || data.error || '';
 
             if (data.image_url) {
@@ -65,6 +129,9 @@
                 document.getElementById('image-output').innerHTML = '';
             }
         };
+
+        // 預設顯示正確畫布狀態
+        modeSelect.dispatchEvent(new Event('change'));
     </script>
 </body>
 </html>
