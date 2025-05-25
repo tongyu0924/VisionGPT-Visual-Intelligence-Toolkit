@@ -1,13 +1,17 @@
 from flask import Flask, request, render_template, jsonify
 from PIL import Image
 import io
+import base64
 from vision_tools import (
     describe_image,
     ask_about_image,
     reason_from_description,
     multi_image_compare,
     conversational_vision_agent,
-    describe_and_draw
+    describe_and_draw,
+    referring_expression_localization,
+    visual_entailment,
+    sketch_to_image
 )
 
 app = Flask(__name__)
@@ -26,7 +30,6 @@ def process():
         question = request.form.get('question', '')
 
         if mode == 'compare':
-            # 從單一 input name="file" 拿多張圖
             files = request.files.getlist("file")
             if len(files) < 2:
                 return jsonify({'error': 'Please upload both Image A and Image B.'}), 400
@@ -56,13 +59,32 @@ def process():
                 desc = describe_image(image)
                 result = reason_from_description(desc, question)
             elif mode == 'describe_and_draw':
-                result = describe_and_draw(image)  # returns dict
+                result = describe_and_draw(image)
                 return jsonify(result)
             elif mode == 'conversational':
                 question = question or "What can you tell me about this image?"
                 result = conversational_vision_agent(image, messages=[
                     {"role": "user", "content": [{"type": "text", "text": question}]}
                 ])
+            elif mode == 'referring_expression':
+                result = referring_expression_localization(image, question)
+            elif mode == 'entailment':
+                result = visual_entailment(image, question)
+            elif mode == 'sketch_to_image':
+                try:
+                    prompt = question or "A sketch-based drawing"
+                    result_image = sketch_to_image(image, prompt)
+                    buffered = io.BytesIO()
+                    result_image.save(buffered, format="PNG")
+                    img_base64 = base64.b64encode(buffered.getvalue()).decode("utf-8")
+                    return jsonify({
+                        "description": prompt,
+                        "image_url": f"data:image/png;base64,{img_base64}"
+                    })
+                except Exception as e:
+                    print("sketch_to_image error:", e)
+                    return jsonify({"error": str(e)})
+
             else:
                 result = "Unknown mode."
 
@@ -74,3 +96,4 @@ def process():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
