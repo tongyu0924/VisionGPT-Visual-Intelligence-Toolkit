@@ -3,7 +3,7 @@
 This is a project that demonstrates a multi-functional visual intelligence tool powered by OpenAI's GPT-4o.  
 It allows users to describe, analyze, reason about, and compare images through a simple web interface.
 
-![Demo](demo.png)
+![Demo](demo_img.png)
 
 ---
 
