@@ -7,7 +7,7 @@ It allows users to describe, analyze, reason about, and compare images through a
 
 ---
 
-## ✨ Features
+## Features
 
 - **Image Description** – One-sentence, analytical, or creative caption generation
 - **Ask About Image** – Ask natural-language questions about image content (VQA-style)
@@ -19,6 +19,12 @@ It allows users to describe, analyze, reason about, and compare images through a
 - **Visual Entailment** – Judge if a textual hypothesis matches the image content
 - **Sketch to Image** – Draw in browser (canvas) and generate a full image using ControlNet
 
+---
+
+## Input Modes
+
+- **Image Upload** – Standard `.png` / `.jpg` image inputs
+- **Canvas Sketching** – Draw directly in-browser using `<canvas>` for selected tasks
 
 ---
 
