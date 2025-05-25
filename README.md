@@ -41,10 +41,12 @@ VisionGPT/
 
 ## Built With
 
-- Python + Flask – Backend server
-- OpenAI GPT-4o – Multimodal image & text model
-- DALL·E 3 – Image generation
-- HTML / JS – Simple frontend interface
+- **Python + Flask** – Lightweight backend server and task router
+- **OpenAI GPT-4o** – Vision-language model for understanding, reasoning, and response
+- **DALL·E 3** – Text-to-image generation from caption or visual prompt
+- **HTML + JavaScript** – Frontend interface with canvas-based sketching
+- **ControlNet (diffusers)** – Converts edge-detected sketches into detailed generated images
+
 
 ---
 
