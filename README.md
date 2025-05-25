@@ -7,14 +7,18 @@ It allows users to describe, analyze, reason about, and compare images through a
 
 ---
 
-## Features
+## ✨ Features
 
-- **Image Description** (default / analytical / creative)
-- **Ask About Image** (VQA-like prompt-based answering)
-- **Reason From Description** (step-by-step reasoning)
-- **Compare Images** (multi-image side-by-side analysis)
-- **Describe and Draw** (caption-based image generation via DALL·E)
-- **Conversational Agent** (chat-like vision assistant)
+- **Image Description** – One-sentence, analytical, or creative caption generation
+- **Ask About Image** – Ask natural-language questions about image content (VQA-style)
+- **Reason From Description** – Logical inference from visual scene
+- **Compare Images** – Side-by-side image comparison with explanation
+- **Describe and Draw** – Describe uploaded image and generate a new one with DALL·E 3
+- **Conversational Agent** – Multimodal chatbot with image understanding
+- **Referring Expression** – Identify regions from phrases (e.g., "the red box on the left")
+- **Visual Entailment** – Judge if a textual hypothesis matches the image content
+- **Sketch to Image** – Draw in browser (canvas) and generate a full image using ControlNet
+
 
 ---
 
