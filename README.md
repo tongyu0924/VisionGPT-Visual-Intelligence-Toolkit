@@ -34,7 +34,6 @@ VisionGPT/
 - Python + Flask – Backend server
 - OpenAI GPT-4o – Multimodal image & text model
 - DALL·E 3 – Image generation
-- Pillow – Image loading & preprocessing
 - HTML / JS – Simple frontend interface
 
 ---
